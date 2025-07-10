@@ -1,5 +1,5 @@
 <h4>New Progress Update</h4>
-<%= form_with model: [@proposal, @progress_update], local: true do |f| %>
+<%= form_with model: [@proposal, @progress_update], local: true, multipart: true do |f| %>
   <div class="mb-2">
     <%= f.label :title %>
     <%= f.text_field :title, class: "form-control" %>
@@ -13,6 +13,11 @@
   <div class="mb-2">
     <%= f.label :status %>
     <%= f.select :status, ["On Track", "Delayed", "Completed"], {}, class: "form-control" %>
+  </div>
+
+  <div class="mb-2">
+    <%= f.label :evidences, "Upload Evidence (Photos, PDFs, etc.)" %>
+    <%= f.file_field :evidences, multiple: true, class: "form-control" %>
   </div>
 
   <div class="mb-2">

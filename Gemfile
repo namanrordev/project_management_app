@@ -49,6 +49,8 @@ gem 'sassc-rails'
 gem 'paper_trail', '~> 13.0'
 gem 'wicked_pdf'
 gem 'wkhtmltopdf-binary'
+gem 'mini_magick'
+gem 'image_processing', '~> 1.2'
 
 # Use Sass to process CSS
 # gem "sassc-rails"

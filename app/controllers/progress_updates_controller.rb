@@ -27,6 +27,6 @@ class ProgressUpdatesController < ApplicationController
   end
 
   def progress_update_params
-    params.require(:progress_update).permit(:title, :description, :status, :percent_done)
+    params.require(:progress_update).permit(:title, :description, :status, :percent_done, evidences: [])
   end
 end

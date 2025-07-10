@@ -1,4 +1,4 @@
-<div class="container mt-4">
+<div class="container-fluid mt-3 ps-3">
   <% co_author = @proposal.co_authors.find_by(user_id: current_user.id) %>
   <% if co_author&.invited? && co_author.user_id == current_user.id %>
     <div class="d-flex gap-2 mt-2">

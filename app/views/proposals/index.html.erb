@@ -1,6 +1,7 @@
 <div class="container mt-4">
   <h2>All Proposals</h2>
   <%= link_to 'New Proposal', new_proposal_path, class: "btn btn-primary mb-3" %>
+  <%= link_to "Financial Impact Report", financial_impact_report_path, class: "btn btn-outline-dark mb-3" %>
 
   <h4 class="mb-3">Filter Proposals by Cost</h4>
   <%= form_with url: proposals_path, method: :get, local: true, class: "row g-2 mb-4" do %>
@@ -50,6 +51,4 @@
 
     <%= submit_tag "Compare Selected", class: "btn btn-outline-primary mt-2" %>
   <% end %>
-
-  <%= link_to "Financial Impact Report", financial_impact_report_path, class: "btn btn-outline-dark" %>
 </div>

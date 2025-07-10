@@ -8,6 +8,22 @@
       <small class="text-muted float-end"><%= update.created_at.strftime("%d %b %Y") %></small>
       <p><%= update.description %></p>
       <span>Status: <%= update.status %> | Done: <%= update.percent_done %>%</span>
+
+      <% if update.evidences.attached? %>
+        <div class="mt-2">
+          <strong>Attachments:</strong>
+          <ul>
+            <% update.evidences.each do |file| %>
+              <li>
+                <% if file.image? %>
+                  <%= image_tag file.variant(resize_to_limit: [200, 200]), class: "img-thumbnail" %>
+                <% end %>
+                <%= link_to file.filename.to_s, url_for(file), target: "_blank" %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
     </li>
   <% end %>
 </ul>
