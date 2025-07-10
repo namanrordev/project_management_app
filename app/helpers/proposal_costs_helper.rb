@@ -1,0 +1,2 @@
+module ProposalCostsHelper
+end

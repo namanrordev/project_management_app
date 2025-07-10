@@ -27,6 +27,48 @@
   <%= link_to 'Back', proposals_path, class: "btn btn-outline-primary" %>
 </div>
 
+<h4 class="mt-4">Cost Breakdown</h4>
+
+<% if @proposal.proposal_costs.any? %>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Category</th>
+        <th>Description</th>
+        <th>Amount</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @proposal.proposal_costs.each do |cost| %>
+        <tr>
+          <td><%= cost.category %></td>
+          <td><%= cost.description %></td>
+          <td>₹<%= number_with_precision(cost.amount, precision: 2) %></td>
+          <td>
+            <%= button_to "Delete", proposal_proposal_cost_path(@proposal, cost),
+                method: :delete,
+                data: { confirm: "Are you sure?" },
+                class: "btn btn-sm btn-outline-danger" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+    <tfoot>
+      <tr>
+        <th colspan="2">Total</th>
+        <th colspan="2">
+          ₹<%= number_with_precision(@proposal.proposal_costs.sum(:amount), precision: 2) %>
+        </th>
+      </tr>
+    </tfoot>
+  </table>
+<% else %>
+  <p class="text-muted">No cost items added yet.</p>
+<% end %>
+
+<%= link_to "Add Cost Item", new_proposal_proposal_cost_path(@proposal), class: "btn btn-success mt-2" %>
+<hr>
 
 <h3>Invite Co-author</h3>
 

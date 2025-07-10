@@ -6,6 +6,7 @@ class Proposal < ApplicationRecord
   has_many :coauthor_users, through: :co_authors, source: :user
   has_many :approvals, class_name: "ProposalApproval", dependent: :destroy
   has_many :approved_users, through: :approvals, source: :user
+  has_many :proposal_costs, dependent: :destroy
 
   def approval_status
     # Consider both invited and accepted co-authors
