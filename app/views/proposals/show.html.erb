@@ -1,0 +1,7 @@
+<div class="container mt-4">
+  <h2><%= @proposal.title %></h2>
+  <p><%= @proposal.description %></p>
+
+  <%= link_to 'Edit', edit_proposal_path(@proposal), class: "btn btn-secondary" %>
+  <%= link_to 'Back', proposals_path, class: "btn btn-outline-primary" %>
+</div>

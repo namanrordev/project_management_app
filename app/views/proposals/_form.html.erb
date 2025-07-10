@@ -1,0 +1,13 @@
+<%= form_with model: proposal, local: true do |f| %>
+  <div class="mb-3">
+    <%= f.label :title, class: "form-label" %>
+    <%= f.text_field :title, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :description, class: "form-label" %>
+    <%= f.text_area :description, class: "form-control", rows: 5 %>
+  </div>
+
+  <%= f.submit class: "btn btn-success" %>
+<% end %>

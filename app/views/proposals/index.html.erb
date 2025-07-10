@@ -1,0 +1,24 @@
+<div class="container mt-4">
+  <h2>All Proposals</h2>
+  <%= link_to 'New Proposal', new_proposal_path, class: "btn btn-primary mb-3" %>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @proposals.each do |proposal| %>
+        <tr>
+          <td><%= link_to proposal.title, proposal_path(proposal) %></td>
+          <td>
+            <%= link_to 'Edit', edit_proposal_path(proposal), class: "btn btn-sm btn-outline-secondary" %>
+            <%= link_to 'Delete', proposal_path(proposal), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
