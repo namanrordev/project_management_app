@@ -67,7 +67,9 @@ class ProposalsController < ApplicationController
   end
 
   def proposal_params
-    params.require(:proposal).permit(:title, :description)
+    permitted = [:title, :description] # or whatever your base fields are
+    permitted += [:feasibility_score, :review_comment] if current_user&.admin?
+    params.require(:proposal).permit(permitted)
   end
 
   def authorize_proposal_editing

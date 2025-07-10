@@ -27,6 +27,38 @@
   <%= link_to 'Back', proposals_path, class: "btn btn-outline-primary" %>
 </div>
 
+<hr class="my-4">
+<h4>Feasibility Score</h4>
+
+<% if current_user&.admin? %>
+  <!-- Admin: Editable form -->
+  <%= form_with model: @proposal, url: proposal_path(@proposal), method: :patch, local: true do |f| %>
+    <div class="mb-3">
+      <%= f.label :feasibility_score, "Feasibility Score (0–100)" %>
+      <%= f.number_field :feasibility_score, class: "form-control", min: 0, max: 100 %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :review_comment, "Review Comment (optional)" %>
+      <%= f.text_area :review_comment, class: "form-control", rows: 3 %>
+    </div>
+
+    <%= f.submit "Save Feasibility", class: "btn btn-primary" %>
+  <% end %>
+
+<% elsif @proposal.feasibility_score.present? %>
+  <!-- Non-admin: Read-only display -->
+  <p><strong>Score:</strong> <%= @proposal.feasibility_score %> / 100</p>
+
+  <% if @proposal.review_comment.present? %>
+    <p><strong>Review:</strong> <%= simple_format(@proposal.review_comment) %></p>
+  <% end %>
+<% else %>
+  <!-- No score yet -->
+  <p class="text-muted">Feasibility has not been scored yet.</p>
+<% end %>
+
+<hr class="my-4">
 <h4 class="mt-4">Cost Breakdown</h4>
 
 <% if @proposal.proposal_costs.any? %>
@@ -66,18 +98,21 @@
 <% else %>
   <p class="text-muted">No cost items added yet.</p>
 <% end %>
-
-<%= link_to "Add Cost Item", new_proposal_proposal_cost_path(@proposal), class: "btn btn-success mt-2" %>
+<% if user_can_modify_proposal?(@proposal) %>
+  <%= link_to "Add Cost Item", new_proposal_proposal_cost_path(@proposal), class: "btn btn-success mt-2" %>
+<% end %>
 <hr>
 
+<% if user_can_modify_proposal?(@proposal) %>
 <h3>Invite Co-author</h3>
 
-<%= form_with url: proposal_co_authors_path(@proposal), method: :post, local: true do |f| %>
-  <div class="mb-2">
-    <%= label_tag :email %>
-    <%= email_field_tag :email, nil, class: "form-control" %>
-  </div>
-  <%= submit_tag "Invite", class: "btn btn-primary" %>
+  <%= form_with url: proposal_co_authors_path(@proposal), method: :post, local: true do |f| %>
+    <div class="mb-2">
+      <%= label_tag :email %>
+      <%= email_field_tag :email, nil, class: "form-control" %>
+    </div>
+    <%= submit_tag "Invite", class: "btn btn-primary" %>
+  <% end %>
 <% end %>
 
 <h4 class="mt-4">Co-authors</h4>
