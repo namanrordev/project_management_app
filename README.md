@@ -35,8 +35,8 @@ A full-featured Ruby on Rails app that allows organizations to:
 
 ## 🔧 Setup Instructions
 
-git clone https://github.com/your-username/your-repo-name.git
-cd your-repo-name
+git clone https://github.com/namanrordev/project_management_app.git
+cd project_management_app
 bundle install
 yarn install
 rails db:create db:migrate db:seed
