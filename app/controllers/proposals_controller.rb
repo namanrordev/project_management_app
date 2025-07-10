@@ -2,7 +2,15 @@ class ProposalsController < ApplicationController
   before_action :set_proposal, only: %i[show edit update destroy approve]
 
   def index
-    @proposals = Proposal.all
+    @proposals = Proposal.all.includes(:proposal_costs)
+
+    if params[:min_cost].present?
+      @proposals = @proposals.select { |p| p.total_cost >= params[:min_cost].to_f }
+    end
+
+    if params[:max_cost].present?
+      @proposals = @proposals.select { |p| p.total_cost <= params[:max_cost].to_f }
+    end
   end
 
   def show; end
@@ -59,6 +67,13 @@ class ProposalsController < ApplicationController
     redirect_to @proposal, notice: notice
   end
 
+  def compare
+    @proposals = Proposal.where(id: params[:proposal_ids]).includes(:proposal_costs)
+
+    if @proposals.empty?
+      redirect_to proposals_path, alert: "Please select at least two proposals to compare."
+    end
+  end
 
   private
 

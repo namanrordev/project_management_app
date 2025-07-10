@@ -2,25 +2,52 @@
   <h2>All Proposals</h2>
   <%= link_to 'New Proposal', new_proposal_path, class: "btn btn-primary mb-3" %>
 
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th>Title</th>
-        <th>Status</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @proposals.each do |proposal| %>
+  <h4 class="mb-3">Filter Proposals by Cost</h4>
+  <%= form_with url: proposals_path, method: :get, local: true, class: "row g-2 mb-4" do %>
+    <div class="col-auto">
+      <%= label_tag :min_cost, "Min Cost", class: "form-label" %>
+      <%= number_field_tag :min_cost, params[:min_cost], class: "form-control", step: 0.01 %>
+    </div>
+    <div class="col-auto">
+      <%= label_tag :max_cost, "Max Cost", class: "form-label" %>
+      <%= number_field_tag :max_cost, params[:max_cost], class: "form-control", step: 0.01 %>
+    </div>
+    <div class="col-auto align-self-end">
+      <%= submit_tag "Apply Filter", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+
+  <%= form_with url: compare_proposals_path, method: :get, local: true do %>
+    <table class="table table-striped">
+      <thead>
         <tr>
-          <td><%= link_to proposal.title, proposal_path(proposal) %></td>
-          <td><%= proposal.approval_status %></td>
-          <td>
-            <%= link_to 'Edit', edit_proposal_path(proposal), class: "btn btn-sm btn-outline-secondary" %>
-            <%= link_to 'Delete', proposal_path(proposal), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
-          </td>
+          <th></th>
+          <th>Title</th>
+          <th>Owner</th>
+          <th>Status</th>
+          <th>Feasibility Score</th>
+          <th>Total Cost</th>
+          <th>Actions</th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% @proposals.each do |proposal| %>
+          <tr>
+            <td><%= check_box_tag "proposal_ids[]", proposal.id %></td>
+            <td><%= link_to proposal.title, proposal_path(proposal) %></td>
+            <td><%= proposal.user.name %></td>
+            <td><%= proposal.approval_status.humanize %></td>
+            <td><%= proposal.feasibility_score %></td>
+            <td><%= number_to_currency(proposal.total_cost) %></td>
+            <td>
+              <%= link_to 'Edit', edit_proposal_path(proposal), class: "btn btn-sm btn-outline-secondary" %>
+              <%= link_to 'Delete', proposal_path(proposal), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <%= submit_tag "Compare Selected", class: "btn btn-outline-primary mt-2" %>
+  <% end %>
 </div>

@@ -1,0 +1,40 @@
+<h3>Proposal Comparison</h3>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <% @proposals.each do |proposal| %>
+        <th><%= proposal.title %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Total Cost</th>
+      <% @proposals.each do |proposal| %>
+        <td>₹<%= number_with_precision(proposal.total_cost, precision: 2) %></td>
+      <% end %>
+    </tr>
+
+    <tr>
+      <th>Feasibility Score</th>
+      <% @proposals.each do |proposal| %>
+        <td><%= proposal.feasibility_score || "N/A" %></td>
+      <% end %>
+    </tr>
+  </tbody>
+</table>
+
+<h5>Cost Breakdown</h5>
+<% @proposals.each do |proposal| %>
+  <h6 class="mt-3"><%= proposal.title %></h6>
+  <ul class="list-group mb-3">
+    <% proposal.proposal_costs.each do |cost| %>
+      <li class="list-group-item d-flex justify-content-between">
+        <div><strong><%= cost.category %></strong>: <%= cost.description %></div>
+        <div>₹<%= number_with_precision(cost.amount, precision: 2) %></div>
+      </li>
+    <% end %>
+  </ul>
+<% end %>
