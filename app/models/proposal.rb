@@ -1,6 +1,13 @@
 class Proposal < ApplicationRecord
   has_paper_trail on: [:update], ignore: [:updated_at]
 
+  IMPLEMENTATION_STATUSES = %w[approved in_progress completed]
+
+  validates :implementation_status, inclusion: { in: IMPLEMENTATION_STATUSES }
+
+  scope :in_progress, -> { where(implementation_status: "in_progress") }
+  scope :completed,   -> { where(implementation_status: "completed") }
+
   belongs_to :user
   has_many :co_authors, dependent: :destroy
   has_many :coauthor_users, through: :co_authors, source: :user

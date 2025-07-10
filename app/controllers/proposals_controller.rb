@@ -1,5 +1,5 @@
 class ProposalsController < ApplicationController
-  before_action :set_proposal, only: %i[show edit update destroy approve]
+  before_action :set_proposal, only: %i[show edit update destroy approve update_implementation_status]
 
   def index
     @proposals = Proposal.all.includes(:proposal_costs)
@@ -73,6 +73,15 @@ class ProposalsController < ApplicationController
 
     if @proposals.empty?
       redirect_to proposals_path, alert: "Please select at least two proposals to compare."
+    end
+  end
+
+  def update_implementation_status
+    @proposal = Proposal.find(params[:id])
+    if user_can_modify_proposal?(@proposal) && @proposal.update(implementation_status: params[:proposal][:implementation_status])
+      redirect_to @proposal, notice: "Implementation status updated."
+    else
+      redirect_to @proposal, alert: "Failed to update status."
     end
   end
 

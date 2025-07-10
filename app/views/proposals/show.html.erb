@@ -27,6 +27,20 @@
   <%= link_to 'Back', proposals_path, class: "btn btn-outline-primary" %>
 </div>
 
+<hr>
+<h4>Implementation Status</h4>
+<p>Current Status: <strong><%= @proposal.implementation_status.humanize %></strong></p>
+
+<% if user_can_modify_proposal?(@proposal) %>
+  <%= form_with model: @proposal, url: update_implementation_status_proposal_path(@proposal), method: :patch, local: true do |f| %>
+    <div class="form-group mb-2">
+      <%= f.label :implementation_status, "Change Status" %>
+      <%= f.select :implementation_status, Proposal::IMPLEMENTATION_STATUSES.map { |s| [s.humanize, s] }, {}, class: "form-control" %>
+    </div>
+    <%= f.submit "Update Status", class: "btn btn-primary" %>
+  <% end %>
+<% end %>
+
 <hr class="my-4">
 <h4>Feasibility Score</h4>
 
