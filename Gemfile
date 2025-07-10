@@ -47,6 +47,8 @@ gem "bootsnap", require: false
 gem 'bootstrap', "~> 5.3.3"
 gem 'sassc-rails'
 gem 'paper_trail', '~> 13.0'
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'
 
 # Use Sass to process CSS
 # gem "sassc-rails"

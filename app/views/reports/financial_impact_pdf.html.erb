@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: sans-serif; font-size: 12px; }
+    h2, h4 { border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; }
+    .section { margin-bottom: 30px; }
+    .category { font-weight: bold; color: #555; }
+  </style>
+</head>
+<body>
+
+<h2>Financial Impact Report</h2>
+<p>Generated on: <%= Time.now.strftime("%d %B %Y, %I:%M %p") %></p>
+
+<% @proposals.each do |proposal| %>
+  <div class="section">
+    <h4><%= proposal.title %></h4>
+
+    <p><strong>Owner:</strong> <%= proposal.user.name %></p>
+    <p><strong>Approval Status:</strong> <%= proposal.approval_status %></p>
+    <p><strong>Feasibility Score:</strong> <%= proposal.feasibility_score || 'N/A' %></p>
+    <p><strong>Total Cost:</strong> $<%= number_with_precision(proposal.total_cost, precision: 2) %></p>
+
+    <h5>Cost Breakdown by Category</h5>
+    <table>
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Description</th>
+          <th>Amount ($)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% proposal.proposal_costs.each do |cost| %>
+          <tr>
+            <td><%= cost.category %></td>
+            <td><%= cost.description %></td>
+            <td><%= number_with_precision(cost.amount, precision: 2) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <h5>Contributors</h5>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Status</th>
+          <th>Role</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><%= proposal.user.name %></td>
+          <td>Owner</td>
+          <td>Lead Author</td>
+        </tr>
+        <% proposal.co_authors.includes(:user).each do |co| %>
+          <tr>
+            <td><%= co.user.name %></td>
+            <td><%= co.status.titleize %></td>
+            <td>Co-Author</td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <hr>
+  </div>
+<% end %>
+
+</body>
+</html>

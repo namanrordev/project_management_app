@@ -7,14 +7,22 @@ class Proposal < ApplicationRecord
   has_many :approvals, class_name: "ProposalApproval", dependent: :destroy
   has_many :approved_users, through: :approvals, source: :user
   has_many :proposal_costs, dependent: :destroy
+  scope :approved, -> { where(approval_status: "Approved") }
   validates :feasibility_score, numericality: { allow_nil: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
+
+  after_save :update_approval_status
+  after_touch :update_approval_status
 
   def total_cost
     proposal_costs.sum(:amount)
   end
 
-  def approval_status
-    # Consider both invited and accepted co-authors
+  def update_approval_status
+    new_status = calculate_approval_status
+    update_column(:approval_status, new_status) if approval_status != new_status
+  end
+
+  def calculate_approval_status
     required_user_ids = [user.id] + co_authors.where(status: %w[invited accepted]).pluck(:user_id)
     return "Not Ready" if required_user_ids.empty?
 

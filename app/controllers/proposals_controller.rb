@@ -59,6 +59,7 @@ class ProposalsController < ApplicationController
     @proposal.approvals.create(user: current_user)
 
     if @proposal.approved_by_all_required?
+      @proposal.update(approval_status: 'approved')
       notice = "Proposal approved by all collaborators!"
     else
       notice = "Your approval has been recorded."

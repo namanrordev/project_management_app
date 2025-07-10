@@ -1,0 +1,36 @@
+<h3>Financial Impact Report</h3>
+
+<% if @proposals.any? %>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Feasibility</th>
+        <th>Total Cost</th>
+        <th>Cost by Category</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @proposals.each do |proposal| %>
+        <tr>
+          <td><%= link_to proposal.title, proposal_path(proposal) %></td>
+          <td><%= proposal.feasibility_score || "N/A" %></td>
+          <td>₹<%= number_with_precision(proposal.total_cost, precision: 2) %></td>
+          <td>
+            <% grouped = proposal.proposal_costs.group_by(&:category) %>
+            <% grouped.each do |category, items| %>
+              <div>
+                <strong><%= category %>:</strong>
+                ₹<%= number_with_precision(items.sum(&:amount), precision: 2) %>
+              </div>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No approved proposals found.</p>
+<% end %>
+
+<%= link_to "Download PDF", financial_impact_report_path(format: :pdf), class: "btn btn-danger" %>

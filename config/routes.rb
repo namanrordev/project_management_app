@@ -17,4 +17,5 @@ Rails.application.routes.draw do
   root "sessions#new"
 
   get 'compare_proposals', to: 'proposals#compare', as: 'compare_proposals'
+  get "reports/financial_impact", to: "reports#financial_impact", as: :financial_impact_report
 end
