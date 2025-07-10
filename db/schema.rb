@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_07_10_141755) do
+ActiveRecord::Schema[7.1].define(version: 2025_07_10_143110) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,6 +22,19 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_10_141755) do
     t.datetime "updated_at", null: false
     t.index ["proposal_id"], name: "index_co_authors_on_proposal_id"
     t.index ["user_id"], name: "index_co_authors_on_user_id"
+  end
+
+  create_table "progress_updates", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.string "status"
+    t.integer "percent_done"
+    t.bigint "user_id", null: false
+    t.bigint "proposal_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["proposal_id"], name: "index_progress_updates_on_proposal_id"
+    t.index ["user_id"], name: "index_progress_updates_on_user_id"
   end
 
   create_table "proposal_approvals", force: :cascade do |t|
@@ -78,6 +91,8 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_10_141755) do
 
   add_foreign_key "co_authors", "proposals"
   add_foreign_key "co_authors", "users"
+  add_foreign_key "progress_updates", "proposals"
+  add_foreign_key "progress_updates", "users"
   add_foreign_key "proposal_approvals", "proposals"
   add_foreign_key "proposal_approvals", "users"
   add_foreign_key "proposal_costs", "proposals"

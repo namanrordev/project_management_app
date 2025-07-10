@@ -117,6 +117,10 @@
 <% end %>
 <hr>
 
+<hr>
+<h4>Milestones & Progress</h4>
+<%= link_to "View Progress Updates", proposal_progress_updates_path(@proposal), class: "btn btn-outline-secondary" %>
+
 <% if user_can_modify_proposal?(@proposal) %>
 <h3>Invite Co-author</h3>
 

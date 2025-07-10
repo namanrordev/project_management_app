@@ -14,6 +14,7 @@ class Proposal < ApplicationRecord
   has_many :approvals, class_name: "ProposalApproval", dependent: :destroy
   has_many :approved_users, through: :approvals, source: :user
   has_many :proposal_costs, dependent: :destroy
+  has_many :progress_updates, dependent: :destroy
   scope :approved, -> { where(approval_status: "Approved") }
   validates :feasibility_score, numericality: { allow_nil: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 100 }
 

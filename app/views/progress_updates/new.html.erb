@@ -1,0 +1,24 @@
+<h4>New Progress Update</h4>
+<%= form_with model: [@proposal, @progress_update], local: true do |f| %>
+  <div class="mb-2">
+    <%= f.label :title %>
+    <%= f.text_field :title, class: "form-control" %>
+  </div>
+
+  <div class="mb-2">
+    <%= f.label :description %>
+    <%= f.text_area :description, class: "form-control" %>
+  </div>
+
+  <div class="mb-2">
+    <%= f.label :status %>
+    <%= f.select :status, ["On Track", "Delayed", "Completed"], {}, class: "form-control" %>
+  </div>
+
+  <div class="mb-2">
+    <%= f.label :percent_done %>
+    <%= f.number_field :percent_done, class: "form-control", min: 0, max: 100 %>
+  </div>
+
+  <%= f.submit "Save", class: "btn btn-success" %>
+<% end %>

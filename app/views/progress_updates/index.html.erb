@@ -1,0 +1,13 @@
+<h4>Progress Updates</h4>
+<%= link_to "Add Milestone", new_proposal_progress_update_path(@proposal), class: "btn btn-primary mb-3" if user_can_modify_proposal?(@proposal) %>
+
+<ul class="list-group">
+  <% @progress_updates.each do |update| %>
+    <li class="list-group-item">
+      <strong><%= update.title %></strong>
+      <small class="text-muted float-end"><%= update.created_at.strftime("%d %b %Y") %></small>
+      <p><%= update.description %></p>
+      <span>Status: <%= update.status %> | Done: <%= update.percent_done %>%</span>
+    </li>
+  <% end %>
+</ul>

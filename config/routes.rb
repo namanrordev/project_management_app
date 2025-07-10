@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :proposals do
     resources :co_authors, only: [:create, :index, :update]
     resources :proposal_costs, only: [:new, :create, :destroy]
+    resources :progress_updates, only: [:new, :create, :index]
     member do
       post :approve
     end
