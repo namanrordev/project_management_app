@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "dashboard", to: "public_dashboards#index"
   resources :users, only: [:new, :create]
   resources :sessions, only: [:new, :create, :destroy]
 

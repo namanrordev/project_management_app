@@ -1,0 +1,35 @@
+<div class="container mt-3">
+  <h2 class="mb-4">Public Implementation Dashboard</h2>
+
+  <% @proposals.each do |proposal| %>
+    <div class="card mb-3">
+      <div class="card-body">
+        <h4 class="card-title"><%= proposal.title %></h4>
+
+        <p>
+          <strong>Status:</strong>
+          <span class="badge bg-<%= bootstrap_class_for_status(proposal.implementation_status) %>">
+            <%= proposal.implementation_status.humanize %>
+          </span>
+        </p>
+
+        <p><strong>Feasibility Score:</strong> <%= proposal.feasibility_score || "N/A" %></p>
+
+        <% total_percent = proposal.progress_updates.average(:percent_done)&.round(1) || 0 %>
+        <p><strong>Progress:</strong> <%= total_percent %>%</p>
+
+        <div class="progress mb-2">
+          <div class="progress-bar" role="progressbar"
+               style="width: <%= total_percent %>%;" aria-valuenow="<%= total_percent %>"
+               aria-valuemin="0" aria-valuemax="100">
+            <%= total_percent %>%
+          </div>
+        </div>
+
+        <% if current_user %>
+          <%= link_to "View Proposal", proposal_path(proposal), class: "btn btn-outline-primary btn-sm" %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

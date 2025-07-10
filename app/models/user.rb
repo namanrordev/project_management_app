@@ -8,6 +8,8 @@ class User < ApplicationRecord
   has_many :approvals, class_name: "ProposalApproval", dependent: :destroy
   has_many :approved_proposals, through: :approvals, source: :proposal
 
+  validates :email, uniqueness: { message: "is already added" }
+
   def admin?
     self.admin
   end
