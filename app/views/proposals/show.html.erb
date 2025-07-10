@@ -21,10 +21,30 @@
   <% @proposal.co_authors.each do |co_author| %>
     <li class="list-group-item d-flex justify-content-between">
       <%= co_author.user.name %> — <%= co_author.status %>
-      <% if co_author.invited? %>
-        <%= button_to "Accept", proposal_co_author_path(@proposal, user_id: co_author.user_id, status: "accepted"), method: :patch, class: "btn btn-success btn-sm" %>
-        <%= button_to "Decline", proposal_co_author_path(@proposal, user_id: co_author.user_id, status: "declined"), method: :patch, class: "btn btn-danger btn-sm" %>
+      <% if co_author.invited? && co_author.user_id == current_user.id %>
+        <%= button_to "Accept", proposal_co_author_path(@proposal, co_author), method: :patch, params: { status: "accepted", user_id: co_author.user_id }, class: "btn btn-success btn-sm" %>
+        <%= button_to "Decline", proposal_co_author_path(@proposal, co_author), method: :patch, params: { status: "declined", user_id: co_author.user_id }, class: "btn btn-danger btn-sm" %>
       <% end %>
     </li>
   <% end %>
 </ul>
+
+<h4 class="mt-5">Edit History</h4>
+<% @proposal.versions.reverse_each do |version| %>
+  <div class="card my-2">
+    <div class="card-body">
+      <p><strong>Changed by:</strong> <%= User.find_by(id: version.whodunnit)&.email || "Unknown" %></p>
+      <p><strong>At:</strong> <%= version.created_at.strftime("%d %b %Y, %I:%M %p") %></p>
+
+      <% if version.object_changes.present? %>
+        <ul>
+          <% version.changeset.each do |field, values| %>
+            <li><strong><%= field.humanize %>:</strong> "<%= values[0] %>" → "<%= values[1] %>"</li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p>No field-level changes recorded.</p>
+      <% end %>
+    </div>
+  </div>
+<% end %>

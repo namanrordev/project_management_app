@@ -11,7 +11,9 @@ class ProposalsController < ApplicationController
     @proposal = current_user.proposals.build
   end
 
-  def edit; end
+  def edit
+    authorize_proposal_editing
+  end
 
   def create
     @proposal = current_user.proposals.build(proposal_params)
@@ -23,6 +25,7 @@ class ProposalsController < ApplicationController
   end
 
   def update
+    authorize_proposal_editing
     if @proposal.update(proposal_params)
       redirect_to @proposal, notice: "Proposal updated."
     else
@@ -31,8 +34,12 @@ class ProposalsController < ApplicationController
   end
 
   def destroy
-    @proposal.destroy
-    redirect_to proposals_path, notice: "Proposal deleted."
+    if current_user == @proposal.user || @proposal.co_authors.accepted.exists?(user_id: current_user.id)
+      @proposal.destroy
+      redirect_to proposals_path, notice: "Proposal deleted."
+    else
+      redirect_to proposals_path, alert: "You are not authorized to delete #{@proposal.title} with author #{@proposal.user} proposal."
+    end
   end
 
   private
@@ -43,5 +50,11 @@ class ProposalsController < ApplicationController
 
   def proposal_params
     params.require(:proposal).permit(:title, :description)
+  end
+
+  def authorize_proposal_editing
+    unless current_user == @proposal.user || @proposal.co_authors.accepted.exists?(user_id: current_user.id)
+      redirect_to proposals_path, alert: "You are not authorized to edit \'#{@proposal.title}\'' with author #{@proposal.user.name} proposal."
+    end
   end
 end

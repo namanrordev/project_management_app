@@ -31,9 +31,9 @@ class CoAuthorsController < ApplicationController
 
     if co_author.user == current_user || current_user == @proposal.user
       co_author.update!(status: params[:status])
-      redirect_to proposal_path(@proposal), notice: "Co-author status updated."
+      redirect_to @proposal, notice: "Co-author status updated."
     else
-      redirect_to proposal_path(@proposal), alert: "Not authorized to update status."
+      redirect_to @proposal, alert: "Not authorized to update status."
     end
   end
 

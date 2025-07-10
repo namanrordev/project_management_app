@@ -153,6 +153,9 @@ GEM
     nio4r (2.7.4)
     nokogiri (1.17.2-x86_64-linux)
       racc (~> 1.4)
+    paper_trail (13.0.0)
+      activerecord (>= 5.2)
+      request_store (~> 1.1)
     pg (1.5.9)
     popper_js (2.11.8)
     pp (0.6.2)
@@ -209,6 +212,8 @@ GEM
     regexp_parser (2.10.0)
     reline (0.6.1)
       io-console (~> 0.5)
+    request_store (1.7.0)
+      rack (>= 1.4)
     rexml (3.4.1)
     rubyzip (2.4.1)
     sassc (2.4.0)
@@ -273,6 +278,7 @@ DEPENDENCIES
   cssbundling-rails
   jbuilder
   jsbundling-rails
+  paper_trail (~> 13.0)
   pg (~> 1.1)
   puma (~> 6.0)
   rails (~> 7.1.3)
