@@ -1,5 +1,5 @@
 class ProposalsController < ApplicationController
-  before_action :set_proposal, only: %i[show edit update destroy]
+  before_action :set_proposal, only: %i[show edit update destroy approve]
 
   def index
     @proposals = Proposal.all
@@ -41,6 +41,24 @@ class ProposalsController < ApplicationController
       redirect_to proposals_path, alert: "You are not authorized to delete #{@proposal.title} with author #{@proposal.user} proposal."
     end
   end
+
+  def approve
+    unless @proposal.user == current_user || @proposal.co_authors.accepted.exists?(user: current_user)
+      redirect_to @proposal, alert: "You are not authorized to approve this proposal."
+      return
+    end
+
+    @proposal.approvals.create(user: current_user)
+
+    if @proposal.approved_by_all_required?
+      notice = "Proposal approved by all collaborators!"
+    else
+      notice = "Your approval has been recorded."
+    end
+
+    redirect_to @proposal, notice: notice
+  end
+
 
   private
 

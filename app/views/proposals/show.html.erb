@@ -1,4 +1,25 @@
 <div class="container mt-4">
+  <% co_author = @proposal.co_authors.find_by(user_id: current_user.id) %>
+  <% if co_author&.invited? && co_author.user_id == current_user.id %>
+    <div class="d-flex gap-2 mt-2">
+      <%= button_to "Accept Invitation", proposal_co_author_path(@proposal, co_author),
+          method: :patch,
+          params: { status: "accepted", user_id: co_author.user_id },
+          class: "btn btn-success btn-sm" %>
+
+      <%= button_to "Decline Invitation", proposal_co_author_path(@proposal, co_author),
+          method: :patch,
+          params: { status: "declined", user_id: co_author.user_id },
+          class: "btn btn-danger btn-sm" %>
+    </div>
+  <% end %>
+
+  <% if (@proposal.user == current_user || @proposal.co_authors.where(status: %w[invited accepted]).exists?(user: current_user)) && !@proposal.approved_users.include?(current_user) %>
+    <%= button_to "Approve Proposal", approve_proposal_path(@proposal), method: :post, class: "btn btn-success" %>
+  <% elsif @proposal.approved_users.include?(current_user) %>
+    <p><span class="badge bg-success">You have approved this proposal.</span></p>
+  <% end %>
+
   <h2><%= @proposal.title %></h2>
   <p><%= @proposal.description %></p>
 
@@ -8,6 +29,7 @@
 
 
 <h3>Invite Co-author</h3>
+
 <%= form_with url: proposal_co_authors_path(@proposal), method: :post, local: true do |f| %>
   <div class="mb-2">
     <%= label_tag :email %>
@@ -21,10 +43,6 @@
   <% @proposal.co_authors.each do |co_author| %>
     <li class="list-group-item d-flex justify-content-between">
       <%= co_author.user.name %> — <%= co_author.status %>
-      <% if co_author.invited? && co_author.user_id == current_user.id %>
-        <%= button_to "Accept", proposal_co_author_path(@proposal, co_author), method: :patch, params: { status: "accepted", user_id: co_author.user_id }, class: "btn btn-success btn-sm" %>
-        <%= button_to "Decline", proposal_co_author_path(@proposal, co_author), method: :patch, params: { status: "declined", user_id: co_author.user_id }, class: "btn btn-danger btn-sm" %>
-      <% end %>
     </li>
   <% end %>
 </ul>

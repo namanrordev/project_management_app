@@ -6,6 +6,9 @@ Rails.application.routes.draw do
 
   resources :proposals do
     resources :co_authors, only: [:create, :index, :update]
+    member do
+      post :approve
+    end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
