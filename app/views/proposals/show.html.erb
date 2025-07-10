@@ -5,3 +5,26 @@
   <%= link_to 'Edit', edit_proposal_path(@proposal), class: "btn btn-secondary" %>
   <%= link_to 'Back', proposals_path, class: "btn btn-outline-primary" %>
 </div>
+
+
+<h3>Invite Co-author</h3>
+<%= form_with url: proposal_co_authors_path(@proposal), method: :post, local: true do |f| %>
+  <div class="mb-2">
+    <%= label_tag :email %>
+    <%= email_field_tag :email, nil, class: "form-control" %>
+  </div>
+  <%= submit_tag "Invite", class: "btn btn-primary" %>
+<% end %>
+
+<h4 class="mt-4">Co-authors</h4>
+<ul class="list-group">
+  <% @proposal.co_authors.each do |co_author| %>
+    <li class="list-group-item d-flex justify-content-between">
+      <%= co_author.user.name %> — <%= co_author.status %>
+      <% if co_author.invited? %>
+        <%= button_to "Accept", proposal_co_author_path(@proposal, user_id: co_author.user_id, status: "accepted"), method: :patch, class: "btn btn-success btn-sm" %>
+        <%= button_to "Decline", proposal_co_author_path(@proposal, user_id: co_author.user_id, status: "declined"), method: :patch, class: "btn btn-danger btn-sm" %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

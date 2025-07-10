@@ -8,13 +8,13 @@ class ProposalsController < ApplicationController
   def show; end
 
   def new
-    @proposal = Proposal.new
+    @proposal = current_user.proposals.build
   end
 
   def edit; end
 
   def create
-    @proposal = Proposal.new(proposal_params)
+    @proposal = current_user.proposals.build(proposal_params)
     if @proposal.save
       redirect_to @proposal, notice: "Proposal created."
     else

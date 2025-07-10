@@ -11,6 +11,32 @@
   </head>
 
   <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid justify-content-between">
+        <div class="d-flex">
+          <% if current_user %>
+            <%= link_to "Logout", logout_path, method: :delete, class: "btn btn-outline-danger btn-sm me-2" %>
+          <% else %>
+            <%= link_to "Login", root_path, class: "btn btn-outline-primary btn-sm me-2" %>
+            <%= link_to "Register", new_user_path, class: "btn btn-outline-success btn-sm" %>
+          <% end %>
+        </div>
+        
+        <a class="navbar-brand ms-auto" href="/">Proposal Management System</a>
+      </div>
+    </nav>
+
+    <% if notice %>
+      <div class="alert alert-success">
+        <%= notice %>
+      </div>
+    <% end %>
+
+    <% if alert %>
+      <div class="alert alert-danger">
+        <%= alert %>
+      </div>
+    <% end %>
     <%= yield %>
   </body>
 </html>
